@@ -217,7 +217,8 @@ REGION_TRANSLATIONS = {
     "전남": "Jeonnam",
     "경북": "Gyeongbuk",
     "경남": "Gyeongnam",
-    "제주": "Jeju"
+    "제주": "Jeju",
+    "전국": "National"
 }
 
 class EDA:
