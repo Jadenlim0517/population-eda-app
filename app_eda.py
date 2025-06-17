@@ -282,23 +282,25 @@ class EDA:
             past_year = latest_year - 5
             delta_df = df[df['연도'].isin([past_year, latest_year])]
             pivot = delta_df.pivot(index='지역', columns='연도', values='인구')
-            pivot.drop('전국', errors='ignore', inplace=True)
+            pivot.drop('National', errors='ignore', inplace=True)
             pivot['diff'] = pivot[latest_year] - pivot[past_year]
             pivot['rate'] = (pivot['diff'] / pivot[past_year]) * 100
 
             # Horizontal bar graph of diff
             fig1, ax1 = plt.subplots()
             pivot.sort_values('diff', ascending=False, inplace=True)
-            sns.barplot(x='diff', y=pivot.index, data=pivot.reset_index(), ax=ax1)
+            sns.barplot(x='diff', y='지역', data=pivot.reset_index(), ax=ax1)
             ax1.set_title("Population Change in 5 Years")
             ax1.set_xlabel("Change (x1000)")
+            ax1.set_ylabel("Region")
             st.pyplot(fig1)
 
             # Horizontal bar graph of rate
             fig2, ax2 = plt.subplots()
-            sns.barplot(x='rate', y=pivot.index, data=pivot.reset_index(), ax=ax2)
+            sns.barplot(x='rate', y='지역', data=pivot.reset_index(), ax=ax2)
             ax2.set_title("Growth Rate in 5 Years (%)")
             ax2.set_xlabel("Rate (%)")
+            ax2.set_ylabel("Region")
             st.pyplot(fig2)
             st.markdown("> Insight: Regions with highest absolute or relative growth are visible at the top of the charts.")
 
