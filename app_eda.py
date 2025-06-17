@@ -260,15 +260,19 @@ class EDA:
 
         with tab2:
             st.header("연도별 전체 인구 추이")
-            national_df = df[df['지역'] == '전국']
+            national_df = df[df['지역'] == 'National']
             fig, ax = plt.subplots()
             ax.plot(national_df['연도'], national_df['인구'], label='Population')
 
-            # Predict 2035 population
+            # Predict 2035 population safely
             recent = national_df.sort_values('연도', ascending=False).head(3)
-            net_change = (recent['출생아수(명)'] - recent['사망자수(명)']).mean()
-            projected = national_df[national_df['연도'] == national_df['연도'].max()]['인구'].values[0] + net_change * (2035 - national_df['연도'].max())
-            ax.plot(2035, projected, 'ro', label='Predicted 2035')
+            if len(recent) >= 3 and not recent[['출생아수(명)', '사망자수(명)']].isnull().any().any():
+                net_change = (recent['출생아수(명)'] - recent['사망자수(명)']).mean()
+                latest_year = national_df['연도'].max()
+                latest_population = national_df.loc[national_df['연도'] == latest_year, '인구']
+                if not latest_population.empty:
+                    projected = latest_population.values[0] + net_change * (2035 - latest_year)
+                    ax.plot(2035, projected, 'ro', label='Predicted 2035')
 
             ax.set_title("Yearly Population Trend")
             ax.set_xlabel("Year")
@@ -306,7 +310,7 @@ class EDA:
 
         with tab4:
             st.header("증감률 상위 지역 및 연도")
-            temp_df = df[df['지역'] != '전국'].copy()
+            temp_df = df[df['지역'] != 'National'].copy()
             temp_df.sort_values(['지역', '연도'], inplace=True)
             temp_df['증감'] = temp_df.groupby('지역')['인구'].diff()
 
@@ -317,7 +321,7 @@ class EDA:
 
         with tab5:
             st.header("누적 영역 그래프 시각화")
-            pivot_area = df[df['지역'] != '전국'].pivot(index='연도', columns='지역', values='인구')
+            pivot_area = df[df['지역'] != 'National'].pivot(index='연도', columns='지역', values='인구')
             pivot_area.fillna(0, inplace=True)
 
             fig, ax = plt.subplots(figsize=(12, 6))
@@ -326,6 +330,7 @@ class EDA:
             ax.set_xlabel("Year")
             ax.set_ylabel("Population")
             st.pyplot(fig)
+
 
 # ---------------------
 # 페이지 객체 생성
