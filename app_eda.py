@@ -227,8 +227,9 @@ class EDA:
         with tab1:
             st.header("기초 통계")
             st.subheader("데이터프레임 구조")
-            buffer = st.text("\n").getvalue()
-            st.text(df.info(buf=buffer))
+            buffer = io.StringIO()
+            df.info(buf=buffer)
+            st.text(buffer.getvalue())
 
             st.subheader("기초 통계량")
             st.dataframe(df.describe())
@@ -299,7 +300,6 @@ class EDA:
             ax.set_xlabel("Year")
             ax.set_ylabel("Population")
             st.pyplot(fig)
-
 
 # ---------------------
 # 페이지 객체 생성
