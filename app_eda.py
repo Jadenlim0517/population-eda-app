@@ -280,7 +280,7 @@ class EDA:
             ax.legend()
             st.pyplot(fig)
 
-         with tab3:
+        with tab3:
             st.header("지역별 인구 변화량 분석")
             latest_year = df['연도'].max()
             past_year = latest_year - 5
