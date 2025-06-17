@@ -200,6 +200,26 @@ class Logout:
 # ---------------------
 # EDA 페이지 클래스
 # ---------------------
+REGION_TRANSLATIONS = {
+    "서울": "Seoul",
+    "부산": "Busan",
+    "대구": "Daegu",
+    "인천": "Incheon",
+    "광주": "Gwangju",
+    "대전": "Daejeon",
+    "울산": "Ulsan",
+    "세종": "Sejong",
+    "경기": "Gyeonggi",
+    "강원": "Gangwon",
+    "충북": "Chungbuk",
+    "충남": "Chungnam",
+    "전북": "Jeonbuk",
+    "전남": "Jeonnam",
+    "경북": "Gyeongbuk",
+    "경남": "Gyeongnam",
+    "제주": "Jeju"
+}
+
 class EDA:
     def __init__(self):
         st.title("📊 Population Trends EDA")
@@ -219,6 +239,9 @@ class EDA:
 
         # Convert 연도 to int
         df['연도'] = pd.to_numeric(df['연도'], errors='coerce').astype(int)
+
+        # Translate region names
+        df['지역'] = df['지역'].replace(REGION_TRANSLATIONS)
 
         tab1, tab2, tab3, tab4, tab5 = st.tabs([
             "기초 통계", "연도별 추이", "지역별 분석", "변화량 분석", "시각화"
