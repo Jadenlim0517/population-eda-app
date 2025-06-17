@@ -1,0 +1,6 @@
+streamlit
+pyrebase4
+setuptools
+matplotlib
+pandas
+seaborn
