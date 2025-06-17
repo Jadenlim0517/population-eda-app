@@ -316,7 +316,7 @@ class EDA:
 
             top100 = temp_df.sort_values('증감', ascending=False).head(100)
             styled = top100[['연도', '지역', '인구', '증감']].style.format({'증감': '{:,.0f}', '인구': '{:,.0f}'}).background_gradient(
-                subset='증감', cmap='RdBu_r')
+                subset='증감', cmap='bwr', vmin=-top100['증감'].abs().max(), vmax=top100['증감'].abs().max())
             st.dataframe(styled, use_container_width=True)
 
         with tab5:
