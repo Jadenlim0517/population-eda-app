@@ -280,7 +280,7 @@ class EDA:
             ax.legend()
             st.pyplot(fig)
 
-        with tab3:
+         with tab3:
             st.header("지역별 인구 변화량 분석")
             latest_year = df['연도'].max()
             past_year = latest_year - 5
@@ -315,9 +315,17 @@ class EDA:
             temp_df.sort_values(['지역', '연도'], inplace=True)
             temp_df['증감'] = temp_df.groupby('지역')['인구'].diff()
 
-            top100 = temp_df.sort_values('증감', ascending=False).head(100)
-            styled = top100[['연도', '지역', '인구', '증감']].style.format({'증감': '{:,.0f}', '인구': '{:,.0f}'}).background_gradient(
-                subset='증감', cmap='bwr', vmin=-top100['증감'].abs().max(), vmax=top100['증감'].abs().max())
+            top100 = temp_df.sort_values('증감', key=abs, ascending=False).head(100)
+            max_abs = top100['증감'].abs().max()
+
+            styled = top100[['연도', '지역', '인구', '증감']].style.format({
+                '증감': '{:,.0f}', '인구': '{:,.0f}'
+            }).background_gradient(
+                subset='증감',
+                cmap='bwr',  # blue for increase, red for decrease
+                vmin=-max_abs,
+                vmax=max_abs
+            )
             st.dataframe(styled, use_container_width=True)
 
         with tab5:
